@@ -11,6 +11,7 @@ AccountsManager manager(filename);
 void show_all_accounts();
 void add_account();
 void remove_account();
+void update_account();
 
 int main()
 {
@@ -19,7 +20,7 @@ int main()
     {
         cout << "All the accounts in " << filename << ":" << endl;
         show_all_accounts();
-        cout << "Input an option( 1.show all accounts  2.add an account  3.remove an account  4.quit ):" << endl;
+        cout << "Input an option( 1.show all accounts  2.add an account  3.remove an account  4.update an account  5.quit ):" << endl;
         int option;
         cin >> option;
         cout << endl;
@@ -42,6 +43,16 @@ int main()
             }
             break;
         case 4:
+            try
+            {
+                update_account();
+            }
+            catch (const std::exception& e)
+            {
+                cout << e.what() << endl;
+            }
+            break;
+        case 5:
             cout << "Good bye!" << endl;
             flag = false;
             break;
@@ -84,4 +95,20 @@ void remove_account()
     cin >> index;
     manager.erase_account(index);
     cout << "Successfully removed the account!" << endl;
+}
+
+void update_account()
+{
+    cout << "Input the index of the account you want to update:";
+    size_t index;
+    cin >> index;
+    Account account;
+    cout << "Input the new name:";
+    cin >> account.name;
+    cout << "Input the new username:";
+    cin >> account.username;
+    cout << "Input the new password:";
+    cin >> account.password;
+    manager.edit_account(index, account);
+    cout << "Successfully updated the account!" << endl;
 }

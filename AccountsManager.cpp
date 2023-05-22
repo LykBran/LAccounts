@@ -68,6 +68,38 @@ void AccountsManager::erase_account(size_t index)
     get_accounts();
 }
 
+void AccountsManager::edit_account(size_t index, Account new_account)
+{
+    size_t linenum = countLines(filename);
+    if (index > linenum)
+    {
+        throw std::out_of_range("The index should be smaller than the number of the accounts.");
+    }
+    streampos posg = f.tellg(), posp = f.tellp();
+    f.clear();
+    ofstream outfile("tmp");
+    for (size_t n = 0; n < linenum; ++n)
+    {
+        if (n == index - 1)
+        {
+            outfile << new_account << endl;
+        }
+        else
+        {
+            outfile << accounts[n] << endl;
+        }
+    }
+    f.close();
+    f.clear();
+    outfile.close();
+    remove(filename.c_str());
+    rename("tmp", filename.c_str());
+    f.open(filename, ios_base::in | ios_base::out | ios_base::app);
+    f.seekg(posg);
+    f.seekp(posp);
+    get_accounts();
+}
+
 size_t AccountsManager::countLines(string filename)
 {
     ifstream inf(filename, ios_base::in);
