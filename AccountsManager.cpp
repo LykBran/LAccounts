@@ -18,7 +18,7 @@ void AccountsManager::get_accounts()
         stringstream ss;
         ss << line;
         Account acc;
-        ss >> acc.website >> acc.username >> acc.password;
+        ss >> acc.name >> acc.username >> acc.password;
         accounts.push_back(acc);
     }
     f.seekg(pos);
@@ -35,7 +35,7 @@ void AccountsManager::write_account(Account account)
     streampos pos = f.tellp();
     f.clear();
     f.seekp(ios_base::end);
-    f << account.website << ' ' << account.username << ' ' << account.password << endl;
+    f << account.name << ' ' << account.username << ' ' << account.password << endl;
     f.seekp(pos);
     get_accounts();
 }

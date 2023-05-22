@@ -59,7 +59,7 @@ void show_all_accounts()
     size_t n = 1;
     for (Account account : manager.all_accounts())
     {
-        cout << n << ".website:" << account.website << " username:" << account.username << " password:" << account.password << endl;
+        cout << n << ".name:" << account.name << " username:" << account.username << " password:" << account.password << endl;
         ++n;
     }
 }
@@ -67,8 +67,8 @@ void show_all_accounts()
 void add_account()
 {
     Account account;
-    cout << "Input the website:";
-    cin >> account.website;
+    cout << "Input the name:";
+    cin >> account.name;
     cout << "Input the username:";
     cin >> account.username;
     cout << "Input the password:";

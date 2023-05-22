@@ -6,13 +6,13 @@
 
 struct Account
 {
-    std::string website, username, password;
+    std::string name, username, password;
 };
 
 template <class _Elem, class _Traits>
 std::basic_ostream<_Elem, _Traits>& operator<<(std::basic_ostream<_Elem, _Traits>& os, const Account& account)
 {
-    os << account.website << ' ' << account.username << ' ' << account.password;
+    os << account.name << ' ' << account.username << ' ' << account.password;
     return os;
 }
 
