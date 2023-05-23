@@ -5,8 +5,8 @@
 
 using namespace std;
 
-string filename = "lemon.lad";
-AccountsManager manager(filename);
+string filename;
+AccountsManager* manager = nullptr;
 
 void show_all_accounts();
 void add_account();
@@ -15,6 +15,9 @@ void update_account();
 
 int main()
 {
+    cout << "Input the file name to store your accounts." << endl;
+    cin >> filename;
+    manager = new AccountsManager(filename);
     bool flag = true;
     while (flag)
     {
@@ -53,7 +56,7 @@ int main()
             }
             break;
         case 5:
-            cout << "Good bye!" << endl;
+            cout << "Good bye!";
             flag = false;
             break;
         default:
@@ -62,13 +65,14 @@ int main()
         }
         cout << endl;
     }
+    delete manager;
     return 0;
 }
 
 void show_all_accounts()
 {
     size_t n = 1;
-    for (Account account : manager.all_accounts())
+    for (Account account : manager->all_accounts())
     {
         cout << n << ".name:" << account.name << " username:" << account.username << " password:" << account.password << endl;
         ++n;
@@ -84,7 +88,7 @@ void add_account()
     cin >> account.username;
     cout << "Input the password:";
     cin >> account.password;
-    manager.write_account(account);
+    manager->write_account(account);
     cout << "Successfully added the account!" << endl;
 }
 
@@ -93,7 +97,7 @@ void remove_account()
     cout << "Input the index of the account you want to remove:";
     size_t index;
     cin >> index;
-    manager.erase_account(index);
+    manager->erase_account(index);
     cout << "Successfully removed the account!" << endl;
 }
 
@@ -109,6 +113,6 @@ void update_account()
     cin >> account.username;
     cout << "Input the new password:";
     cin >> account.password;
-    manager.edit_account(index, account);
+    manager->edit_account(index, account);
     cout << "Successfully updated the account!" << endl;
 }
