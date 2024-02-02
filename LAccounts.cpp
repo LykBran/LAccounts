@@ -3,24 +3,22 @@
 
 using namespace std;
 
-string filename;
-AccountsManager* manager = nullptr;
-
-void show_all_accounts();
-void add_account();
-void remove_account();
-void update_account();
+void show_all_accounts(AccountsManager*);
+void add_account(AccountsManager*);
+void remove_account(AccountsManager*);
+void update_account(AccountsManager*);
 
 int main()
 {
+    string filename;
     cout << "Input the file name to store your accounts." << endl;
     cin >> filename;
-    manager = new AccountsManager(filename);
+    auto manager = make_unique<AccountsManager>(filename);
     bool flag = true;
     while (flag)
     {
         cout << "All the accounts in " << filename << ":" << endl;
-        show_all_accounts();
+        show_all_accounts(manager.get());
         cout << "Input an option( 1.show all accounts  2.add an account  3.remove an account  4.update an account  5.quit ):" << endl;
         int option;
         cin >> option;
@@ -28,15 +26,15 @@ int main()
         switch (option)
         {
         case 1:
-            show_all_accounts();
+            show_all_accounts(manager.get());
             break;
         case 2:
-            add_account();
+            add_account(manager.get());
             break;
         case 3:
             try
             {
-                remove_account();
+                remove_account(manager.get());
             }
             catch (const std::exception& e)
             {
@@ -46,7 +44,7 @@ int main()
         case 4:
             try
             {
-                update_account();
+                update_account(manager.get());
             }
             catch (const std::exception& e)
             {
@@ -63,11 +61,10 @@ int main()
         }
         cout << endl;
     }
-    delete manager;
     return 0;
 }
 
-void show_all_accounts()
+void show_all_accounts(AccountsManager* manager)
 {
     size_t n = 1;
     for (Account account : manager->all_accounts())
@@ -77,7 +74,7 @@ void show_all_accounts()
     }
 }
 
-void add_account()
+void add_account(AccountsManager* manager)
 {
     Account account;
     cout << "Input the name:";
@@ -90,7 +87,7 @@ void add_account()
     cout << "Successfully added the account!" << endl;
 }
 
-void remove_account()
+void remove_account(AccountsManager* manager)
 {
     cout << "Input the index of the account you want to remove:";
     size_t index;
@@ -99,7 +96,7 @@ void remove_account()
     cout << "Successfully removed the account!" << endl;
 }
 
-void update_account()
+void update_account(AccountsManager* manager)
 {
     cout << "Input the index of the account you want to update:";
     size_t index;

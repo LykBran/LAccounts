@@ -1,5 +1,6 @@
 #include "AccountsManager.h"
 
+#include <filesystem>
 #include <iostream>
 #include <sstream>
 #include <stdexcept>
@@ -30,7 +31,7 @@ vector<Account> AccountsManager::all_accounts()
     return accounts;
 }
 
-void AccountsManager::write_account(Account account)
+void AccountsManager::write_account(const Account& account)
 {
     streampos pos = f.tellp();
     f.clear();
@@ -47,7 +48,8 @@ void AccountsManager::erase_account(size_t index)
     {
         throw std::out_of_range("The index should be smaller than the number of the accounts.");
     }
-    streampos posg = f.tellg(), posp = f.tellp();
+    streampos posg = f.tellg();
+    streampos posp = f.tellp();
     f.clear();
     ofstream outfile("tmp");
     for (size_t n = 0; n < linenum; ++n)
@@ -61,21 +63,22 @@ void AccountsManager::erase_account(size_t index)
     f.clear();
     outfile.close();
     remove(filename.c_str());
-    rename("tmp", filename.c_str());
+    filesystem::rename("tmp", filename.c_str());
     f.open(filename, ios_base::in | ios_base::out | ios_base::app);
     f.seekg(posg);
     f.seekp(posp);
     get_accounts();
 }
 
-void AccountsManager::edit_account(size_t index, Account new_account)
+void AccountsManager::edit_account(size_t index, const Account& new_account)
 {
     size_t linenum = countLines(filename);
     if (index > linenum)
     {
         throw std::out_of_range("The index should be smaller than the number of the accounts.");
     }
-    streampos posg = f.tellg(), posp = f.tellp();
+    streampos posg = f.tellg();
+    streampos posp = f.tellp();
     f.clear();
     ofstream outfile("tmp");
     for (size_t n = 0; n < linenum; ++n)
@@ -93,14 +96,14 @@ void AccountsManager::edit_account(size_t index, Account new_account)
     f.clear();
     outfile.close();
     remove(filename.c_str());
-    rename("tmp", filename.c_str());
+    filesystem::rename("tmp", filename.c_str());
     f.open(filename, ios_base::in | ios_base::out | ios_base::app);
     f.seekg(posg);
     f.seekp(posp);
     get_accounts();
 }
 
-size_t AccountsManager::countLines(string filename)
+size_t AccountsManager::countLines(const string& filename)
 {
     ifstream inf(filename, ios_base::in);
     string tmp;
@@ -112,9 +115,8 @@ size_t AccountsManager::countLines(string filename)
     return n;
 }
 
-AccountsManager::AccountsManager(const string& file)
+AccountsManager::AccountsManager(const string& file) : filename(file)
 {
     f.open(file, ios_base::in | ios_base::out | ios_base::app);
-    filename = file;
     get_accounts();
 }
