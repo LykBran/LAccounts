@@ -364,3 +364,9 @@ FodyWeavers.xsd
 
 /lemon.lad
 /*.lad
+
+# xmake & vscode
+xmake.lua
+.vscode
+.xmake
+build
